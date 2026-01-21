@@ -6,26 +6,26 @@ Add this badge to your `README.md` to display the CI workflow status:
 
 ### Markdown Format
 ```markdown
-[![CI](https://github.com/ibnehussain/kyndrylorderservice/actions/workflows/ci.yml/badge.svg)](https://github.com/ibnehussain/kyndrylorderservice/actions/workflows/ci.yml)
+[![CI](https://github.com/YOUR_USERNAME/YOUR_REPOSITORY/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_USERNAME/YOUR_REPOSITORY/actions/workflows/ci.yml)
 ```
 
 ### HTML Format
 ```html
-<a href="https://github.com/ibnehussain/kyndrylorderservice/actions/workflows/ci.yml">
-  <img src="https://github.com/ibnehussain/kyndrylorderservice/actions/workflows/ci.yml/badge.svg" alt="CI">
+<a href="https://github.com/YOUR_USERNAME/YOUR_REPOSITORY/actions/workflows/ci.yml">
+  <img src="https://github.com/YOUR_USERNAME/YOUR_REPOSITORY/actions/workflows/ci.yml/badge.svg" alt="CI">
 </a>
 ```
 
 ### Badge for Specific Branch
 ```markdown
-[![CI](https://github.com/ibnehussain/kyndrylorderservice/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ibnehussain/kyndrylorderservice/actions/workflows/ci.yml)
+[![CI](https://github.com/YOUR_USERNAME/YOUR_REPOSITORY/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/YOUR_USERNAME/YOUR_REPOSITORY/actions/workflows/ci.yml)
 ```
 
 ## Additional Recommended Badges
 
 ### Code Coverage (Codecov)
 ```markdown
-[![codecov](https://codecov.io/gh/ibnehussain/kyndrylorderservice/branch/main/graph/badge.svg)](https://codecov.io/gh/ibnehussain/kyndrylorderservice)
+[![codecov](https://codecov.io/gh/YOUR_USERNAME/YOUR_REPOSITORY/branch/main/graph/badge.svg)](https://codecov.io/gh/YOUR_USERNAME/YOUR_REPOSITORY)
 ```
 
 ### Python Version
@@ -50,8 +50,8 @@ Add this to the top of your README.md:
 ```markdown
 # Order Management Service
 
-[![CI](https://github.com/ibnehussain/kyndrylorderservice/actions/workflows/ci.yml/badge.svg)](https://github.com/ibnehussain/kyndrylorderservice/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/ibnehussain/kyndrylorderservice/branch/main/graph/badge.svg)](https://codecov.io/gh/ibnehussain/kyndrylorderservice)
+[![CI](https://github.com/YOUR_USERNAME/YOUR_REPOSITORY/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_USERNAME/YOUR_REPOSITORY/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/YOUR_USERNAME/YOUR_REPOSITORY/branch/main/graph/badge.svg)](https://codecov.io/gh/YOUR_USERNAME/YOUR_REPOSITORY)
 ![Python Version](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
