@@ -1,0 +1,20 @@
+# Production Dependencies
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic[email]==2.5.0
+azure-cosmos==4.5.1
+
+# Development Dependencies
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+black==23.11.0
+isort==5.12.0
+mypy==1.7.1
+flake8==6.1.0
+
+# Optional: Enhanced features
+# redis==5.0.1              # For caching
+# celery==5.3.4              # For background tasks
+# sentry-sdk[fastapi]==1.38.0 # For error tracking
+# prometheus-client==0.19.0   # For metrics
