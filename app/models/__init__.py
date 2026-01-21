@@ -1,17 +1,17 @@
 """Models package initialization"""
 
-from .base import OrderStatus, PaymentStatus, PaymentMethod, TimestampMixin
-from .order import Order, OrderItem, Address, PaymentInfo
 from .analytics import (
+    CustomerMetrics,
     DailyOrderMetrics,
     OrderStatusMetrics,
-    CustomerMetrics,
-    RevenueMetrics
+    RevenueMetrics,
 )
+from .base import OrderStatus, PaymentMethod, PaymentStatus, TimestampMixin
+from .order import Address, Order, OrderItem, PaymentInfo
 
 __all__ = [
     "OrderStatus",
-    "PaymentStatus", 
+    "PaymentStatus",
     "PaymentMethod",
     "TimestampMixin",
     "Order",
@@ -21,5 +21,5 @@ __all__ = [
     "DailyOrderMetrics",
     "OrderStatusMetrics",
     "CustomerMetrics",
-    "RevenueMetrics"
+    "RevenueMetrics",
 ]

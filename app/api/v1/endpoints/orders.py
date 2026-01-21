@@ -1,12 +1,18 @@
 """Order API endpoints"""
 
-from fastapi import APIRouter, HTTPException, Depends, Query, status
 from typing import List, Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+
+from app.models.base import OrderStatus
 from app.schemas.order import (
-    OrderCreate, OrderUpdate, OrderResponse, OrderListResponse, MessageResponse
+    MessageResponse,
+    OrderCreate,
+    OrderListResponse,
+    OrderResponse,
+    OrderUpdate,
 )
 from app.services.order_service import OrderService, get_order_service
-from app.models.base import OrderStatus
 
 router = APIRouter(prefix="/orders", tags=["orders"])
 
@@ -16,11 +22,10 @@ router = APIRouter(prefix="/orders", tags=["orders"])
     response_model=OrderResponse,
     status_code=status.HTTP_201_CREATED,
     summary="Create a new order",
-    description="Create a new order with customer, items, and payment information"
+    description="Create a new order with customer, items, and payment information",
 )
 async def create_order(
-    order_data: OrderCreate,
-    order_service: OrderService = Depends(get_order_service)
+    order_data: OrderCreate, order_service: OrderService = Depends(get_order_service)
 ) -> OrderResponse:
     """Create a new order"""
     try:
@@ -29,7 +34,7 @@ async def create_order(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Failed to create order: {str(e)}"
+            detail=f"Failed to create order: {str(e)}",
         )
 
 
@@ -37,37 +42,36 @@ async def create_order(
     "/",
     response_model=OrderListResponse,
     summary="List orders with pagination",
-    description="Get a paginated list of orders, optionally filtered by customer or status"
+    description="Get a paginated list of orders, optionally filtered by customer or status",
 )
 async def list_orders(
     customer_id: Optional[str] = Query(None, description="Filter by customer ID"),
-    order_status: Optional[OrderStatus] = Query(None, alias="status", description="Filter by order status"),
+    order_status: Optional[OrderStatus] = Query(
+        None, alias="status", description="Filter by order status"
+    ),
     page: int = Query(1, ge=1, description="Page number"),
     page_size: int = Query(20, ge=1, le=100, description="Number of items per page"),
-    order_service: OrderService = Depends(get_order_service)
+    order_service: OrderService = Depends(get_order_service),
 ) -> OrderListResponse:
     """List orders with pagination and optional filters"""
     try:
         orders, total_count = await order_service.list_orders(
-            customer_id=customer_id,
-            status=order_status,
-            page=page,
-            page_size=page_size
+            customer_id=customer_id, status=order_status, page=page, page_size=page_size
         )
-        
+
         total_pages = (total_count + page_size - 1) // page_size
-        
+
         return OrderListResponse(
             orders=[OrderResponse(**order.dict()) for order in orders],
             total_count=total_count,
             page=page,
             page_size=page_size,
-            total_pages=total_pages
+            total_pages=total_pages,
         )
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to list orders: {str(e)}"
+            detail=f"Failed to list orders: {str(e)}",
         )
 
 
@@ -75,12 +79,12 @@ async def list_orders(
     "/{order_id}",
     response_model=OrderResponse,
     summary="Get order by ID",
-    description="Retrieve a specific order by its ID and customer ID"
+    description="Retrieve a specific order by its ID and customer ID",
 )
 async def get_order(
     order_id: str,
     customer_id: str = Query(..., description="Customer ID for the order"),
-    order_service: OrderService = Depends(get_order_service)
+    order_service: OrderService = Depends(get_order_service),
 ) -> OrderResponse:
     """Get a specific order by ID"""
     try:
@@ -88,7 +92,7 @@ async def get_order(
         if not order:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Order {order_id} not found"
+                detail=f"Order {order_id} not found",
             )
         return OrderResponse(**order.dict())
     except HTTPException:
@@ -96,7 +100,7 @@ async def get_order(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to get order: {str(e)}"
+            detail=f"Failed to get order: {str(e)}",
         )
 
 
@@ -104,11 +108,10 @@ async def get_order(
     "/number/{order_number}",
     response_model=OrderResponse,
     summary="Get order by order number",
-    description="Retrieve a specific order by its order number"
+    description="Retrieve a specific order by its order number",
 )
 async def get_order_by_number(
-    order_number: str,
-    order_service: OrderService = Depends(get_order_service)
+    order_number: str, order_service: OrderService = Depends(get_order_service)
 ) -> OrderResponse:
     """Get a specific order by order number"""
     try:
@@ -116,7 +119,7 @@ async def get_order_by_number(
         if not order:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Order {order_number} not found"
+                detail=f"Order {order_number} not found",
             )
         return OrderResponse(**order.dict())
     except HTTPException:
@@ -124,7 +127,7 @@ async def get_order_by_number(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to get order: {str(e)}"
+            detail=f"Failed to get order: {str(e)}",
         )
 
 
@@ -132,13 +135,13 @@ async def get_order_by_number(
     "/{order_id}",
     response_model=OrderResponse,
     summary="Update order",
-    description="Update an existing order's status, notes, or shipping address"
+    description="Update an existing order's status, notes, or shipping address",
 )
 async def update_order(
     order_id: str,
     customer_id: str = Query(..., description="Customer ID for the order"),
     update_data: OrderUpdate = ...,
-    order_service: OrderService = Depends(get_order_service)
+    order_service: OrderService = Depends(get_order_service),
 ) -> OrderResponse:
     """Update an existing order"""
     try:
@@ -146,20 +149,17 @@ async def update_order(
         if not order:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Order {order_id} not found"
+                detail=f"Order {order_id} not found",
             )
         return OrderResponse(**order.dict())
     except HTTPException:
         raise
     except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
-        )
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to update order: {str(e)}"
+            detail=f"Failed to update order: {str(e)}",
         )
 
 
@@ -167,12 +167,12 @@ async def update_order(
     "/{order_id}/cancel",
     response_model=MessageResponse,
     summary="Cancel order",
-    description="Cancel an existing order if it's in a cancellable state"
+    description="Cancel an existing order if it's in a cancellable state",
 )
 async def cancel_order(
     order_id: str,
     customer_id: str = Query(..., description="Customer ID for the order"),
-    order_service: OrderService = Depends(get_order_service)
+    order_service: OrderService = Depends(get_order_service),
 ) -> MessageResponse:
     """Cancel an existing order"""
     try:
@@ -180,23 +180,20 @@ async def cancel_order(
         if not order:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Order {order_id} not found"
+                detail=f"Order {order_id} not found",
             )
         return MessageResponse(
             message=f"Order {order.order_number} cancelled successfully",
-            order_id=order.id
+            order_id=order.id,
         )
     except HTTPException:
         raise
     except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
-        )
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to cancel order: {str(e)}"
+            detail=f"Failed to cancel order: {str(e)}",
         )
 
 
@@ -204,12 +201,12 @@ async def cancel_order(
     "/{order_id}",
     response_model=MessageResponse,
     summary="Delete order",
-    description="Permanently delete an order (admin operation)"
+    description="Permanently delete an order (admin operation)",
 )
 async def delete_order(
     order_id: str,
     customer_id: str = Query(..., description="Customer ID for the order"),
-    order_service: OrderService = Depends(get_order_service)
+    order_service: OrderService = Depends(get_order_service),
 ) -> MessageResponse:
     """Delete an order (admin operation)"""
     try:
@@ -217,18 +214,17 @@ async def delete_order(
         if not deleted:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Order {order_id} not found"
+                detail=f"Order {order_id} not found",
             )
         return MessageResponse(
-            message=f"Order {order_id} deleted successfully",
-            order_id=order_id
+            message=f"Order {order_id} deleted successfully", order_id=order_id
         )
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to delete order: {str(e)}"
+            detail=f"Failed to delete order: {str(e)}",
         )
 
 
@@ -236,33 +232,31 @@ async def delete_order(
     "/customers/{customer_id}/orders",
     response_model=OrderListResponse,
     summary="Get customer orders",
-    description="Get all orders for a specific customer with pagination"
+    description="Get all orders for a specific customer with pagination",
 )
 async def get_customer_orders(
     customer_id: str,
     page: int = Query(1, ge=1, description="Page number"),
     page_size: int = Query(20, ge=1, le=100, description="Number of items per page"),
-    order_service: OrderService = Depends(get_order_service)
+    order_service: OrderService = Depends(get_order_service),
 ) -> OrderListResponse:
     """Get all orders for a specific customer"""
     try:
         orders, total_count = await order_service.get_customer_orders(
-            customer_id=customer_id,
-            page=page,
-            page_size=page_size
+            customer_id=customer_id, page=page, page_size=page_size
         )
-        
+
         total_pages = (total_count + page_size - 1) // page_size
-        
+
         return OrderListResponse(
             orders=[OrderResponse(**order.dict()) for order in orders],
             total_count=total_count,
             page=page,
             page_size=page_size,
-            total_pages=total_pages
+            total_pages=total_pages,
         )
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to get customer orders: {str(e)}"
+            detail=f"Failed to get customer orders: {str(e)}",
         )

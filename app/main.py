@@ -2,8 +2,9 @@
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.core.config import get_settings
+
 from app.api.v1.router import api_router
+from app.core.config import get_settings
 
 settings = get_settings()
 
@@ -36,7 +37,7 @@ async def root():
         "service": settings.app_name,
         "version": settings.app_version,
         "status": "healthy",
-        "docs_url": "/docs"
+        "docs_url": "/docs",
     }
 
 
@@ -48,9 +49,5 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(
-        "app.main:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=settings.debug
-    )
+
+    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=settings.debug)
