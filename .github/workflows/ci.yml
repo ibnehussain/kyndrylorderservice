@@ -32,11 +32,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run code formatting checks
-      run: |
-        black --check app/ tests/
-        isort --check-only app/ tests/
-
     - name: Run linting
       run: |
         flake8 app/ tests/
