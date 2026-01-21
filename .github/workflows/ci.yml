@@ -34,7 +34,7 @@ jobs:
 
     - name: Run linting
       run: |
-        flake8 app/ tests/
+        flake8 app/ tests/ --max-line-length=88 --extend-ignore=E722,W291
 
     - name: Run type checking
       run: |

@@ -1,6 +1,5 @@
 """Configuration management for the Order Management Service"""
 
-import os
 from functools import lru_cache
 from typing import Optional
 
