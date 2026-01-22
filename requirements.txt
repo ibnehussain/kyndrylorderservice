@@ -3,6 +3,8 @@ fastapi==0.104.1
 uvicorn[standard]==0.24.0
 pydantic[email]==2.5.0
 azure-cosmos==4.5.1
+slowapi==0.1.9
+python-multipart==0.0.6
 
 # Development Dependencies
 pytest==7.4.3
