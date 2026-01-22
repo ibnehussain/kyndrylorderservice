@@ -1,6 +1,7 @@
 """Analytics data models for order metrics"""
 
-from datetime import date, datetime
+from datetime import date as date_type
+from datetime import datetime
 from decimal import Decimal
 from typing import Optional
 
@@ -12,7 +13,7 @@ from app.models.base import TimestampMixin
 class DailyOrderMetrics(BaseModel):
     """Daily order analytics metrics"""
 
-    date: date = Field(..., description="Date for the metrics")
+    date: date_type = Field(..., description="Date for the metrics")
     order_count: int = Field(
         ..., ge=0, description="Total number of orders for the day"
     )
@@ -27,7 +28,7 @@ class DailyOrderMetrics(BaseModel):
     )
 
     class Config:
-        json_encoders = {Decimal: lambda v: float(v), date: lambda v: v.isoformat()}
+        json_encoders = {Decimal: lambda v: float(v), date_type: lambda v: v.isoformat()}
 
 
 class OrderStatusMetrics(BaseModel):
@@ -75,8 +76,8 @@ class CustomerMetrics(BaseModel):
 class RevenueMetrics(BaseModel):
     """Revenue analytics metrics"""
 
-    period_start: date = Field(..., description="Start date of the period")
-    period_end: date = Field(..., description="End date of the period")
+    period_start: date_type = Field(..., description="Start date of the period")
+    period_end: date_type = Field(..., description="End date of the period")
     total_revenue: Decimal = Field(
         ..., ge=0, decimal_places=2, description="Total revenue for the period"
     )
@@ -91,4 +92,4 @@ class RevenueMetrics(BaseModel):
     )
 
     class Config:
-        json_encoders = {Decimal: lambda v: float(v), date: lambda v: v.isoformat()}
+        json_encoders = {Decimal: lambda v: float(v), date_type: lambda v: v.isoformat()}
