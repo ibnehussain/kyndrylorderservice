@@ -10,8 +10,9 @@ class InputSanitizer:
     """Sanitizer for text input to prevent XSS and injection attacks"""
 
     # Dangerous patterns that should be removed
-    # Updated to handle malformed tags like </script > with spaces
-    SCRIPT_PATTERN = re.compile(r"<script[^>]*>.*?</script\s*>", re.IGNORECASE | re.DOTALL)
+    # Updated to handle malformed tags like </script >, </script\t>, </script\n>, etc.
+    # \s* allows any whitespace (spaces, tabs, newlines) before >
+    SCRIPT_PATTERN = re.compile(r"<script[^>]*>.*?</script\s*[^>]*>", re.IGNORECASE | re.DOTALL)
     TAG_PATTERN = re.compile(r"<[^>]+>")
     JAVASCRIPT_PATTERN = re.compile(
         r"javascript:|on\w+\s*=", re.IGNORECASE

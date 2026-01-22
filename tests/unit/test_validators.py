@@ -36,12 +36,20 @@ class TestInputSanitizer:
         assert "Hello" in result
 
     def test_sanitize_text_with_malformed_script_tags(self):
-        """Test sanitization removes malformed script tags with spaces"""
+        """Test sanitization removes malformed script tags with spaces/tabs/newlines"""
+        # Test with space
         text = "<script >alert('XSS')</script >Hello"
         result = InputSanitizer.sanitize_text(text)
         assert "<script" not in result
         assert "</script" not in result
         assert "Hello" in result
+        
+        # Test with tab and newline
+        text = "<script>alert('XSS')</script\t\n bar>World"
+        result = InputSanitizer.sanitize_text(text)
+        assert "<script" not in result
+        assert "</script" not in result
+        assert "World" in result
 
     def test_sanitize_text_with_javascript_url(self):
         """Test sanitization removes javascript: URLs"""
