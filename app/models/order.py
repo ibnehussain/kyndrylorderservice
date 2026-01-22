@@ -69,7 +69,7 @@ class Order(TimestampMixin):
     # Business fields
     order_number: str = Field(..., min_length=1, max_length=50)
     customer_id: str = Field(..., min_length=1)
-    customer_email: str = Field(..., regex=r"^[^@]+@[^@]+\.[^@]+$")
+    customer_email: str = Field(..., pattern=r"^[^@]+@[^@]+\.[^@]+$")
 
     # Order details
     status: OrderStatus = Field(default=OrderStatus.PENDING)
