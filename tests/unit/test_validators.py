@@ -35,6 +35,14 @@ class TestInputSanitizer:
         # After HTML escaping, the text is safe even if 'alert' remains as text
         assert "Hello" in result
 
+    def test_sanitize_text_with_malformed_script_tags(self):
+        """Test sanitization removes malformed script tags with spaces"""
+        text = "<script >alert('XSS')</script >Hello"
+        result = InputSanitizer.sanitize_text(text)
+        assert "<script" not in result
+        assert "</script" not in result
+        assert "Hello" in result
+
     def test_sanitize_text_with_javascript_url(self):
         """Test sanitization removes javascript: URLs"""
         text = "javascript:alert('XSS')"
