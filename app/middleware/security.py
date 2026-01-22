@@ -66,6 +66,8 @@ class RequestValidationMiddleware(BaseHTTPMiddleware):
         """Validate incoming request."""
         # Check content length
         content_length = request.headers.get("content-length")
+        content_length_int = None
+        
         if content_length:
             try:
                 content_length_int = int(content_length)
@@ -98,7 +100,7 @@ class RequestValidationMiddleware(BaseHTTPMiddleware):
             )
             
             # Only validate if there's a body (content-length > 0)
-            if content_length and int(content_length) > 0 and not is_valid_content_type:
+            if content_length_int and content_length_int > 0 and not is_valid_content_type:
                 return JSONResponse(
                     status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
                     content={
