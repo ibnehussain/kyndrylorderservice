@@ -370,10 +370,25 @@ docker-compose -f docker-compose.prod.yml up
 
 ## 🔒 Security Features
 
+This application implements comprehensive security middleware for production deployment:
+
+- **CORS Configuration**: Configurable cross-origin resource sharing with explicit methods
+- **Rate Limiting**: IP-based rate limiting to prevent API abuse (100 req/min default)
+- **Security Headers**: Industry-standard HTTP security headers
+  - X-Content-Type-Options: nosniff
+  - X-Frame-Options: DENY
+  - X-XSS-Protection: 1; mode=block
+  - Strict-Transport-Security with HSTS
+  - Content-Security-Policy (CSP)
+  - Referrer-Policy
+  - Permissions-Policy
+- **Request Validation**: Size limits (10MB default) and content-type validation
 - **Input Validation**: Comprehensive validation with Pydantic
 - **Data Sanitization**: Protection against injection attacks
 - **Error Handling**: Secure error responses without data leakage
 - **Health Checks**: Kubernetes-ready liveness/readiness probes
+
+📖 **See [Security Documentation](docs/SECURITY.md) for detailed configuration and best practices**
 
 ## 📈 Monitoring & Observability
 
