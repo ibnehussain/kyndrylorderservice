@@ -13,7 +13,15 @@ This PR implements comprehensive production-ready security middleware for the Fa
 
 ### 1. Dependencies Added (`requirements.txt`)
 - `slowapi==0.1.9` - For rate limiting
-- `python-multipart==0.0.6` - For form data handling
+- `python-multipart==0.0.18` - For form data handling (updated from 0.0.6 to patch CVEs)
+- `fastapi==0.109.1` - Updated from 0.104.1 to patch Content-Type Header ReDoS vulnerability
+
+**Security Updates:**
+- ⚠️ **python-multipart**: Updated 0.0.6 → 0.0.18
+  - Fixed: DoS via deformation multipart/form-data boundary vulnerability
+  - Fixed: Content-Type Header ReDoS vulnerability (CVE)
+- ⚠️ **fastapi**: Updated 0.104.1 → 0.109.1
+  - Fixed: FastAPI Content-Type Header ReDoS vulnerability
 
 ### 2. New Middleware Components (`app/middleware/`)
 
@@ -70,6 +78,11 @@ enable_security_headers: bool = True
 
 ✅ **CodeQL Security Scan**: 0 vulnerabilities found
 - No security issues detected
+
+✅ **Dependency Security Scan**: All vulnerabilities patched
+- python-multipart: 0.0.6 → 0.0.18 (fixes 2 CVEs)
+- fastapi: 0.104.1 → 0.109.1 (fixes ReDoS vulnerability)
+- GitHub Advisory Database: No vulnerabilities found ✅
 
 ✅ **Manual Testing**: All middleware components tested and working
 - Security headers verified
