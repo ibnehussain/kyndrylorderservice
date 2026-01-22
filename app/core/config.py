@@ -17,6 +17,13 @@ class Settings(BaseSettings):
     # API settings
     api_v1_prefix: str = "/api/v1"
     allowed_hosts: list[str] = ["*"]
+    
+    # Security settings
+    rate_limit_enabled: bool = True
+    rate_limit_default: str = "100/minute"  # Default rate limit for all endpoints
+    rate_limit_strict: str = "10/minute"     # Strict rate limit for auth/critical endpoints
+    max_request_size: int = 10 * 1024 * 1024  # 10MB max request size
+    enable_security_headers: bool = True
 
     # Database settings (Azure Cosmos DB)
     cosmos_endpoint: Optional[str] = None
