@@ -4,7 +4,7 @@ from datetime import datetime
 from decimal import Decimal
 from typing import List, Optional
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, EmailStr, Field, validator
 
 from app.core.validators import DecimalValidator, InputSanitizer
 from app.models.base import OrderStatus, PaymentMethod, PaymentStatus
@@ -102,9 +102,7 @@ class OrderCreate(BaseModel):
     """Schema for creating new orders"""
 
     customer_id: str = Field(..., min_length=1, example="cust_456")
-    customer_email: str = Field(
-        ..., pattern=r"^[^@]+@[^@]+\.[^@]+$", example="customer@example.com"
-    )
+    customer_email: EmailStr = Field(..., example="customer@example.com")
     items: List[OrderItemCreate] = Field(..., min_items=1, max_items=100)
 
     billing_address: AddressSchema
@@ -140,11 +138,12 @@ class OrderCreate(BaseModel):
         return v
 
     @validator("tax_amount", "shipping_amount", "discount_amount")
-    def validate_financial_amounts(cls, v, values, **kwargs):
+    def validate_financial_amounts(cls, v):
         """Validate financial amounts with decimal precision"""
-        field_name = kwargs.get('field', {}).name if 'field' in kwargs else 'amount'
+        # Note: Field name is embedded in the validator since we can't reliably get it from Pydantic V2
+        # The validation is the same for all three fields anyway
         return DecimalValidator.validate_financial_amount(
-            v, field_name=field_name, allow_zero=True
+            v, field_name="financial_amount", allow_zero=True
         )
 
     class Config:

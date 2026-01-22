@@ -20,10 +20,11 @@ class TestInputSanitizer:
         """Test sanitization removes HTML tags"""
         text = "<div>Hello World</div>"
         result = InputSanitizer.sanitize_text(text)
+        # Tags are removed before escaping, so we get clean text
         assert "<div>" not in result
         assert "</div>" not in result
-        # HTML entities should be escaped
-        assert result == "&lt;div&gt;Hello World&lt;/div&gt;"
+        assert "&lt;div&gt;" not in result  # Tags removed before escaping
+        assert result == "Hello World"
 
     def test_sanitize_text_with_script_tags(self):
         """Test sanitization removes script tags"""

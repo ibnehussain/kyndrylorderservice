@@ -20,10 +20,10 @@ class InputSanitizer:
     def sanitize_text(cls, text: Optional[str], max_length: Optional[int] = None) -> Optional[str]:
         """
         Sanitize text input by:
-        1. Escaping HTML entities
-        2. Removing script tags
+        1. Removing script tags
+        2. Removing javascript: URLs and event handlers
         3. Removing HTML tags
-        4. Removing javascript: URLs and event handlers
+        4. Escaping HTML entities (done last to preserve patterns for removal)
         5. Trimming whitespace
         6. Enforcing max length
 
@@ -40,17 +40,17 @@ class InputSanitizer:
         # Convert to string if not already
         text = str(text)
 
-        # Escape HTML entities first
-        text = html.escape(text, quote=True)
-
-        # Remove script tags
+        # Remove script tags first (before escaping)
         text = cls.SCRIPT_PATTERN.sub("", text)
 
-        # Remove HTML tags
+        # Remove javascript: URLs and event handlers (before escaping)
+        text = cls.JAVASCRIPT_PATTERN.sub("", text)
+
+        # Remove HTML tags (before escaping)
         text = cls.TAG_PATTERN.sub("", text)
 
-        # Remove javascript: URLs and event handlers
-        text = cls.JAVASCRIPT_PATTERN.sub("", text)
+        # Escape HTML entities (done last to ensure patterns can match)
+        text = html.escape(text, quote=True)
 
         # Trim whitespace
         text = text.strip()
